@@ -1,10 +1,12 @@
 ﻿using System;
+using NUnit.Framework;
 
-namespace Code.napilnik.Shop
+namespace Napilnik.Shop
 {
-    public class Program
+    public static class ShopTests
     {
-        public static void Main()
+        [Test]
+        public static void UseCase()
         {
             Good iPhone12 = new Good("IPhone 12");
             Good iPhone11 = new Good("IPhone 11");

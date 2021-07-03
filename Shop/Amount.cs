@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Code.napilnik.Shop
+namespace Napilnik.Shop
 {
     public struct Amount
     {

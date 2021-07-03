@@ -4,10 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 
 
-namespace Code.napilnik.Shop
+namespace Napilnik.Shop
 {
-    
-    
     public class Warehouse : IGoodsProvider, IEnumerable<Warehouse.StoredGood>
     {
         public struct StoredGood

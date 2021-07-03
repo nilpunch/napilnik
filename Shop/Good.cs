@@ -1,4 +1,4 @@
-﻿namespace Code.napilnik.Shop
+﻿namespace Napilnik.Shop
 {
     public class Good
     {

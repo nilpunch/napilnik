@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Code.napilnik.Shop
+namespace Napilnik.Shop
 {
     public struct Order
     {
