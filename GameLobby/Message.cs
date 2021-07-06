@@ -13,10 +13,10 @@ namespace Napilnik.GameLobby
         {
             if (sender == null)
                 throw new ArgumentNullException(nameof(sender));
-            
+
             if (string.IsNullOrWhiteSpace(message))
                 throw new ArgumentException(message);
-            
+
             _sender = sender;
             _message = message;
         }

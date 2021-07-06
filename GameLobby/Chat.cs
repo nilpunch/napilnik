@@ -1,35 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace Napilnik.GameLobby
 {
-    public class ChatHistory : IEnumerable<Message>
-    {
-        private readonly List<Message> _logHistory;
-
-        public ChatHistory()
-        {
-            _logHistory = new List<Message>();
-        }
-        
-        internal void Log(Message message)
-        {
-            _logHistory.Add(message);
-        }
-
-        public IEnumerator<Message> GetEnumerator()
-        {
-            return _logHistory.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-    }
-    
-    
     public class Chat
     {
         private readonly ChatHistory _chatHistory;
@@ -44,7 +17,7 @@ namespace Napilnik.GameLobby
                 throw new ArgumentNullException(nameof(chatHistory));
             if (permissionProvider == null)
                 throw new ArgumentNullException(nameof(permissionProvider));
-            
+
             _player = player;
             _chatHistory = chatHistory;
             _permissionProvider = permissionProvider;
@@ -64,7 +37,7 @@ namespace Napilnik.GameLobby
             {
                 if (PlayerNotHavePermission)
                     throw new InvalidOperationException();
-                
+
                 yield return message;
             }
         }
@@ -72,5 +45,10 @@ namespace Napilnik.GameLobby
         public bool PlayerHavePermission => _permissionProvider.CanInteractWithChat(_player);
 
         private bool PlayerNotHavePermission => PlayerHavePermission == false;
+    }
+
+    public interface IChatPermissionProvider
+    {
+        bool CanInteractWithChat(IPlayer player);
     }
 }

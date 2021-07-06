@@ -1,28 +1,21 @@
 ﻿using Napilnik.GameLobby;
 using NUnit.Framework;
 
-namespace Napilnik
+namespace Napilnik.GameLobby
 {
     public static class GameLobbyTests
     {
         [Test]
         public static void UseCase()
         {
-            Player player1 = new Player("A");
-            Player player2 = new Player("B");
-            Player player3 = new Player("C");
+            Lobby lobby = new Lobby();
+            
+            Player player1 = new Player(lobby, "A");
+            Player player2 = new Player(lobby, "B");
+            Player player3 = new Player(lobby, "C");
 
-            Room room1 = new Room(1);
-            Room room2 = new Room(2);
-            
-            
-
-            room1.ConnectPlayer(player1);
-            room1.ConnectPlayer(player2);
-            
-            player1.SetRoom(null);
-            
-            player1.Chat.Write();
+            Room room1 = new Room(lobby, 1);
+            Room room2 = new Room(lobby, 2);
         }
     }
 }
