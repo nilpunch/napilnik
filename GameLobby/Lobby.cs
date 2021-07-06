@@ -7,15 +7,29 @@ namespace Napilnik.GameLobby
     {
         public event Action<PlayerLink> PlayerLinked = delegate {  };
         public event Action<PlayerLink> PlayerUnlinked = delegate {  };
-        
-        public event Action<IPlayer> PlayerReady = delegate {  };
-        public event Action<IPlayer> PlayerNotReady = delegate {  };
 
         private List<PlayerLink> _links;
 
+        private HashSet<IPlayer> _registeredPlayers = new HashSet<IPlayer>();
+        private HashSet<IRoom> _registeredRooms = new HashSet<IRoom>();
+        
         public Lobby()
         {
             _links = new List<PlayerLink>();
+        }
+
+        public Player CreatePlayer(string name)
+        {
+            Player player = new Player(name);
+            _registeredPlayers.Add(player);
+            return player;
+        }
+
+        public Room CreateRoom(int playersCapacity)
+        {
+            Room room = new Room(this, playersCapacity);
+            _registeredRooms.Add(room);
+            return room;
         }
 
         public void LinkPlayer(IPlayer player, IRoom room)
@@ -26,10 +40,10 @@ namespace Napilnik.GameLobby
             if (room == null)
                 throw new ArgumentNullException(nameof(room));
 
-            if (player.RelatedLobby != this)
+            if (_registeredPlayers.Contains(player) == false)
                 throw new InvalidOperationException();
             
-            if (room.RelatedLobby != this)
+            if (_registeredRooms.Contains(room) == false)
                 throw new InvalidOperationException();
             
             if (HaveLink(player))
@@ -48,10 +62,10 @@ namespace Napilnik.GameLobby
             if (room == null)
                 throw new ArgumentNullException(nameof(room));
 
-            if (player.RelatedLobby != this)
+            if (_registeredPlayers.Contains(player) == false)
                 throw new InvalidOperationException();
             
-            if (room.RelatedLobby != this)
+            if (_registeredRooms.Contains(room) == false)
                 throw new InvalidOperationException();
             
             return _links.Exists(link => link.Player == player && link.Room == room);
@@ -62,7 +76,7 @@ namespace Napilnik.GameLobby
             if (player == null)
                 throw new ArgumentNullException(nameof(player));
             
-            if (player.RelatedLobby != this)
+            if (_registeredPlayers.Contains(player) == false)
                 throw new InvalidOperationException();
 
             if (HaveLink(player) == false)
@@ -73,34 +87,12 @@ namespace Napilnik.GameLobby
             PlayerUnlinked.Invoke(playerLink);
         }
 
-        public void NotifyPlayerReady(IPlayer player)
-        {
-            if (player == null)
-                throw new ArgumentNullException(nameof(player));
-            
-            if (player.RelatedLobby != this)
-                throw new InvalidOperationException();
-            
-            PlayerReady.Invoke(player);
-        }
-
-        public void NotifyPlayerNotReady(IPlayer player)
-        {
-            if (player == null)
-                throw new ArgumentNullException(nameof(player));
-            
-            if (player.RelatedLobby != this)
-                throw new InvalidOperationException();
-            
-            PlayerNotReady.Invoke(player);
-        }
-
         private bool HaveLink(IPlayer player)
         {
             if (player == null)
                 throw new ArgumentNullException(nameof(player));
 
-            if (player.RelatedLobby != this)
+            if (_registeredPlayers.Contains(player) == false)
                 throw new InvalidOperationException();
             
             return _links.Exists(link => link.Player == player);

@@ -7,9 +7,6 @@ namespace Napilnik.GameLobby
         event Action<PlayerLink> PlayerLinked;
         event Action<PlayerLink> PlayerUnlinked;
         
-        event Action<IPlayer> PlayerReady;
-        event Action<IPlayer> PlayerNotReady;
-
         bool IsLinked(IPlayer player, IRoom room);
     }
 

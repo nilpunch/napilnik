@@ -2,14 +2,11 @@
 {
     public class Player : IPlayer
     {
-        public Player(Lobby lobby, string name)
+        public Player(string name)
         {
             Name = name;
-            RelatedLobby = lobby;
         }
 
         public string Name { get; }
-
-        public ILobby RelatedLobby { get; }
     }
 }

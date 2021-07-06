@@ -2,6 +2,5 @@
 {
     public interface IRoom
     {
-        ILobby RelatedLobby { get; }
     }
 }

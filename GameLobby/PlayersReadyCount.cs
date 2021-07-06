@@ -9,6 +9,9 @@ namespace Napilnik.GameLobby
 
         public PlayersReadyCount(int playersCapacity)
         {
+            if (playersCapacity <= 0)
+                throw new ArgumentOutOfRangeException(nameof(playersCapacity));
+            
             _playersCapacity = playersCapacity;
             _readyPlayers = 0;
         }

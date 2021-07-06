@@ -15,6 +15,12 @@ namespace Napilnik.GameLobby
 
         public Room(ILobby lobby, int playersCapacity)
         {
+            if (lobby == null)
+                throw new ArgumentNullException(nameof(lobby));
+            
+            if (playersCapacity <= 0)
+                throw new ArgumentOutOfRangeException(nameof(playersCapacity));
+            
             _chatHistory = new ChatHistory();
             _playersStatuses = new PlayersStatusesStorage();
             _playersCounter = new PlayersReadyCount(playersCapacity);
@@ -25,19 +31,6 @@ namespace Napilnik.GameLobby
             
             lobby.PlayerLinked += OnPlayerLinked;
             lobby.PlayerUnlinked += OnPlayerUnlinked;
-            lobby.PlayerReady += OnPlayerReady;
-            lobby.PlayerNotReady += OnPlayerNotReady;
-        }
-
-        public ILobby RelatedLobby
-        {
-            get
-            {
-                if (_disposed)
-                    throw new ObjectDisposedException(nameof(Room));
-                
-                return _relatedLobby;
-            }
         }
 
         public bool InGame
@@ -65,10 +58,8 @@ namespace Napilnik.GameLobby
             
             _disposed = true;
             
-            RelatedLobby.PlayerLinked -= OnPlayerLinked;
-            RelatedLobby.PlayerUnlinked -= OnPlayerUnlinked;
-            RelatedLobby.PlayerReady -= OnPlayerReady;
-            RelatedLobby.PlayerNotReady -= OnPlayerNotReady;
+            _relatedLobby.PlayerLinked -= OnPlayerLinked;
+            _relatedLobby.PlayerUnlinked -= OnPlayerUnlinked;
         }
 
         private void OnPlayerLinked(PlayerLink playerLink)
@@ -97,10 +88,16 @@ namespace Napilnik.GameLobby
                 _playersCounter.RemoveReadyPlayer();
         }
 
-        private void OnPlayerReady(IPlayer player)
+        public void PlayerReady(IPlayer player)
         {
-            if (RelatedLobby.IsNotLinked(player, this))
-                return;
+            if (_disposed)
+                throw new ObjectDisposedException(nameof(Room));
+            
+            if (player == null)
+                throw new ArgumentNullException(nameof(player));
+
+            if (_relatedLobby.IsNotLinked(player, this))
+                throw new InvalidOperationException();
             
             if (InGame)
                 throw new InvalidOperationException();
@@ -115,10 +112,16 @@ namespace Napilnik.GameLobby
                 InGame = true;
         }
 
-        private void OnPlayerNotReady(IPlayer player)
+        public void PlayerNotReady(IPlayer player)
         {
-            if (RelatedLobby.IsNotLinked(player, this))
-                return;
+            if (_disposed)
+                throw new ObjectDisposedException(nameof(Room));
+            
+            if (player == null)
+                throw new ArgumentNullException(nameof(player));
+
+            if (_relatedLobby.IsNotLinked(player, this))
+                throw new InvalidOperationException();
 
             if (_playersStatuses.IsPlayerNotReady(player))
                 return;
