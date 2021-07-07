@@ -106,6 +106,23 @@ namespace Napilnik.GameLobby
             _playersCounter.RemoveReadyPlayer();
         }
 
+        public bool HaveChattingPermission(IPlayer player)
+        {
+            if (_disposed)
+                throw new ObjectDisposedException(nameof(Room));
+            
+            if (player == null)
+                throw new ArgumentNullException(nameof(player));
+
+            if (_relatedLobby.IsNotLinked(player, this))
+                return false;
+
+            if (InGame)
+                return _playersStatuses.IsPlayerReady(player);
+            
+            return true;
+        }
+
         private void OnPlayerLinked(PlayerLink playerLink)
         {
             if (playerLink.Room != this)
@@ -130,23 +147,6 @@ namespace Napilnik.GameLobby
 
             if (_playersStatuses.IsPlayerReady(playerLink.Player))
                 _playersCounter.RemoveReadyPlayer();
-        }
-
-        public bool HaveChattingPermission(IPlayer player)
-        {
-            if (_disposed)
-                throw new ObjectDisposedException(nameof(Room));
-            
-            if (player == null)
-                throw new ArgumentNullException(nameof(player));
-
-            if (_relatedLobby.IsNotLinked(player, this))
-                return false;
-
-            if (InGame)
-                return _playersStatuses.IsPlayerReady(player);
-            
-            return true;
         }
     }
 }
