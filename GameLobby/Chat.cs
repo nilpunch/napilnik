@@ -6,26 +6,28 @@ namespace Napilnik.GameLobby
     public class Chat
     {
         private readonly ChatHistory _chatHistory;
-        private readonly Player _player;
-        private readonly IChatPermissionProvider _permissionProvider;
+        private readonly IPlayer _player;
+        private readonly IChatPermissionChecker _permissionChecker;
 
-        public Chat(Player player, ChatHistory chatHistory, IChatPermissionProvider permissionProvider)
+        public Chat(IPlayer player, ChatHistory chatHistory, IChatPermissionChecker permissionChecker)
         {
             if (player == null)
                 throw new ArgumentNullException(nameof(player));
+            
             if (chatHistory == null)
                 throw new ArgumentNullException(nameof(chatHistory));
-            if (permissionProvider == null)
-                throw new ArgumentNullException(nameof(permissionProvider));
+            
+            if (permissionChecker == null)
+                throw new ArgumentNullException(nameof(permissionChecker));
 
             _player = player;
             _chatHistory = chatHistory;
-            _permissionProvider = permissionProvider;
+            _permissionChecker = permissionChecker;
         }
 
         public void Write(string message)
         {
-            if (PlayerNotHavePermission)
+            if (Locked)
                 throw new InvalidOperationException();
 
             _chatHistory.Log(new Message(_player, message));
@@ -33,22 +35,14 @@ namespace Napilnik.GameLobby
 
         public IEnumerable<Message> Read()
         {
-            foreach (var message in _chatHistory)
-            {
-                if (PlayerNotHavePermission)
-                    throw new InvalidOperationException();
+            if (Locked)
+                throw new InvalidOperationException();
 
-                yield return message;
-            }
+            return _chatHistory;
         }
 
-        public bool PlayerHavePermission => _permissionProvider.CanInteractWithChat(_player);
+        public bool Locked => _permissionChecker.HaveChattingPermission(_player);
 
-        private bool PlayerNotHavePermission => PlayerHavePermission == false;
-    }
-
-    public interface IChatPermissionProvider
-    {
-        bool CanInteractWithChat(IPlayer player);
+        public bool NotLocked => Locked == false;
     }
 }

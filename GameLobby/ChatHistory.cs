@@ -12,7 +12,7 @@ namespace Napilnik.GameLobby
             _logHistory = new List<Message>();
         }
 
-        internal void Log(Message message)
+        public void Log(Message message)
         {
             _logHistory.Add(message);
         }

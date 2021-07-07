@@ -5,11 +5,11 @@ namespace Napilnik.GameLobby
     public class Message
     {
         private string _message;
-        private Player _sender;
+        private IPlayer _sender;
 
         public string Content => $"{_sender.Name}: {_message}";
 
-        public Message(Player sender, string message)
+        public Message(IPlayer sender, string message)
         {
             if (sender == null)
                 throw new ArgumentNullException(nameof(sender));

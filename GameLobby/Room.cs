@@ -3,7 +3,7 @@ using Napilnik.GameLobby;
 
 namespace Napilnik.GameLobby
 {
-    public class Room : IRoom, IDisposable
+    public class Room : IRoom, IChatPermissionChecker, IDisposable
     {
         private readonly ChatHistory _chatHistory;
         private readonly PlayersStatusesStorage _playersStatuses;
@@ -51,6 +51,11 @@ namespace Napilnik.GameLobby
             }
         }
 
+        public Chat GetChat(IPlayer player)
+        {
+            return new Chat(player, _chatHistory, this);
+        }
+
         public void Dispose()
         {
             if (_disposed)
@@ -60,32 +65,6 @@ namespace Napilnik.GameLobby
             
             _relatedLobby.PlayerLinked -= OnPlayerLinked;
             _relatedLobby.PlayerUnlinked -= OnPlayerUnlinked;
-        }
-
-        private void OnPlayerLinked(PlayerLink playerLink)
-        {
-            if (playerLink.Room != this)
-                return;
-
-            if (InGame)
-                throw new InvalidOperationException();
-
-            if (_playersStatuses.IsPlayerNotReady(playerLink.Player))
-                return;
-            
-            _playersCounter.AddReadyPlayer();
-            
-            if (_playersCounter.MaxCapacityReached)
-                InGame = true;
-        }
-
-        private void OnPlayerUnlinked(PlayerLink playerLink)
-        {
-            if (playerLink.Room != this)
-                return;
-
-            if (_playersStatuses.IsPlayerReady(playerLink.Player))
-                _playersCounter.RemoveReadyPlayer();
         }
 
         public void PlayerReady(IPlayer player)
@@ -128,6 +107,49 @@ namespace Napilnik.GameLobby
             
             _playersStatuses.UpdatePlayerStatus(player, PlayerStatus.NotReady);
             _playersCounter.RemoveReadyPlayer();
+        }
+
+        private void OnPlayerLinked(PlayerLink playerLink)
+        {
+            if (playerLink.Room != this)
+                return;
+
+            if (InGame)
+                throw new InvalidOperationException();
+
+            if (_playersStatuses.IsPlayerNotReady(playerLink.Player))
+                return;
+            
+            _playersCounter.AddReadyPlayer();
+            
+            if (_playersCounter.MaxCapacityReached)
+                InGame = true;
+        }
+
+        private void OnPlayerUnlinked(PlayerLink playerLink)
+        {
+            if (playerLink.Room != this)
+                return;
+
+            if (_playersStatuses.IsPlayerReady(playerLink.Player))
+                _playersCounter.RemoveReadyPlayer();
+        }
+
+        public bool HaveChattingPermission(IPlayer player)
+        {
+            if (_disposed)
+                throw new ObjectDisposedException(nameof(Room));
+            
+            if (player == null)
+                throw new ArgumentNullException(nameof(player));
+
+            if (_relatedLobby.IsNotLinked(player, this))
+                return false;
+
+            if (InGame)
+                return _playersStatuses.IsPlayerReady(player);
+            
+            return true;
         }
     }
 }

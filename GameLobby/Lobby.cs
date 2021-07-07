@@ -54,6 +54,22 @@ namespace Napilnik.GameLobby
             PlayerLinked.Invoke(playerLink);
         }
 
+        public void UnlinkPlayer(IPlayer player)
+        {
+            if (player == null)
+                throw new ArgumentNullException(nameof(player));
+            
+            if (_registeredPlayers.Contains(player) == false)
+                throw new InvalidOperationException();
+
+            if (HaveLink(player) == false)
+                throw new InvalidOperationException();
+
+            PlayerLink playerLink = _links.Find(link => link.Player == player);
+            _links.Remove(playerLink);
+            PlayerUnlinked.Invoke(playerLink);
+        }
+
         public bool IsLinked(IPlayer player, IRoom room)
         {
             if (player == null)
@@ -71,23 +87,7 @@ namespace Napilnik.GameLobby
             return _links.Exists(link => link.Player == player && link.Room == room);
         }
 
-        public void UnlinkPlayer(IPlayer player)
-        {
-            if (player == null)
-                throw new ArgumentNullException(nameof(player));
-            
-            if (_registeredPlayers.Contains(player) == false)
-                throw new InvalidOperationException();
-
-            if (HaveLink(player) == false)
-                throw new InvalidOperationException();
-
-            PlayerLink playerLink = _links.Find(link => link.Player == player);
-            _links.Remove(playerLink);
-            PlayerUnlinked.Invoke(playerLink);
-        }
-
-        private bool HaveLink(IPlayer player)
+        public bool HaveLink(IPlayer player)
         {
             if (player == null)
                 throw new ArgumentNullException(nameof(player));
