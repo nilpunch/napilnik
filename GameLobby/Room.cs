@@ -8,18 +8,15 @@ namespace Napilnik.GameLobby
         private readonly ChatHistory _chatHistory;
         private readonly PlayersStatusesStorage _playersStatuses;
         private readonly PlayersReadyCount _playersCounter;
+        private readonly ILobby _relatedLobby;
 
         private bool _disposed;
         private bool _inGame;
-        private readonly ILobby _relatedLobby;
 
         public Room(ILobby lobby, int playersCapacity)
         {
             if (lobby == null)
                 throw new ArgumentNullException(nameof(lobby));
-            
-            if (playersCapacity <= 0)
-                throw new ArgumentOutOfRangeException(nameof(playersCapacity));
             
             _chatHistory = new ChatHistory();
             _playersStatuses = new PlayersStatusesStorage();

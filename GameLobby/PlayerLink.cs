@@ -17,6 +17,7 @@ namespace Napilnik.GameLobby
         }
 
         public IPlayer Player { get; }
+        
         public IRoom Room { get; }
     }
 }

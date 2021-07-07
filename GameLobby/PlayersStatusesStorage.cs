@@ -20,9 +20,7 @@ namespace Napilnik.GameLobby
             }
 
             if (status == PlayerStatus.Ready && _readyPlayers.Contains(player) == false)
-            {
                 _readyPlayers.Add(player);
-            }
         }
 
         public bool IsPlayerReady(IPlayer player)
