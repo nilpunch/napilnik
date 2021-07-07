@@ -7,8 +7,6 @@ namespace Napilnik.GameLobby
         private string _message;
         private IPlayer _sender;
 
-        public string Content => $"{_sender.Name}: {_message}";
-
         public Message(IPlayer sender, string message)
         {
             if (sender == null)
@@ -20,5 +18,7 @@ namespace Napilnik.GameLobby
             _sender = sender;
             _message = message;
         }
+
+        public string Content => $"{_sender.Name}: {_message}";
     }
 }

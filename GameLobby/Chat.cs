@@ -25,6 +25,10 @@ namespace Napilnik.GameLobby
             _permissionChecker = permissionChecker;
         }
 
+        public bool Locked => _permissionChecker.HaveChattingPermission(_player);
+
+        public bool NotLocked => Locked == false;
+
         public void Write(string message)
         {
             if (Locked)
@@ -40,9 +44,5 @@ namespace Napilnik.GameLobby
 
             return _chatHistory;
         }
-
-        public bool Locked => _permissionChecker.HaveChattingPermission(_player);
-
-        public bool NotLocked => Locked == false;
     }
 }
