@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace Napilnik.Logger
 {
@@ -6,6 +7,9 @@ namespace Napilnik.Logger
     {
         public void Log(string message)
         {
+            if (message == null)
+                throw new ArgumentNullException(nameof(message));
+            
             File.WriteAllText("log.txt", message);
         }
     }

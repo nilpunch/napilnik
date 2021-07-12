@@ -1,4 +1,6 @@
-﻿namespace Napilnik.Logger
+﻿using System;
+
+namespace Napilnik.Logger
 {
     class Pathfinder
     {
@@ -6,6 +8,9 @@
 
         public Pathfinder(ILogger logger)
         {
+            if (logger == null)
+                throw new ArgumentNullException(nameof(logger));
+            
             _logger = logger;
         }
 
