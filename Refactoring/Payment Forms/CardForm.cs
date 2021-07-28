@@ -4,11 +4,11 @@ namespace Napilnik.napilnik.Refactoring
 {
     public class CardForm : IPaymentForm
     {
-        public bool Available { get; }
+        public bool Available => true;
 
         public bool PaymentSuccessful { get; private set; }
         
-        public string Name { get; }
+        public string Name => "Card";
         
         public void Show()
         {
