@@ -4,16 +4,6 @@ using System.Text;
 
 namespace Napilnik.Shop
 {
-    public struct Order
-    {
-        public Order(string paylink)
-        {
-            Paylink = paylink;
-        }
-
-        public string Paylink { get; }
-    }
-    
     public class Cart
     {
         private readonly IGoodsProvider _goodsProvider;

@@ -1,5 +1,4 @@
 ﻿using System;
-using Napilnik.GameLobby;
 using NUnit.Framework;
 
 namespace Napilnik.GameLobby

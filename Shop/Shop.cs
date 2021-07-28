@@ -2,10 +2,11 @@
 
 namespace Napilnik.Shop
 {
-    public class Shop
+    public class Shop : IGoodsProvider
     {
         private readonly Warehouse _warehouse;
 
+        
         public Shop(Warehouse warehouse)
         {
             if (warehouse == null)
@@ -16,7 +17,12 @@ namespace Napilnik.Shop
 
         public Cart Cart()
         {
-            return new Cart(_warehouse);
+            return new Cart(this);
+        }
+
+        public bool HasGoods(Good good, Amount amount)
+        {
+            return _warehouse.HasGoods(good, amount);
         }
     }
 }

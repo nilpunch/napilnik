@@ -2,12 +2,12 @@
 
 namespace Napilnik.GameLobby
 {
-    public class PlayersReadyCount
+    public class PlayersReadyCounter
     {
         private readonly int _playersCapacity;
         private int _readyPlayers;
 
-        public PlayersReadyCount(int playersCapacity)
+        public PlayersReadyCounter(int playersCapacity)
         {
             if (playersCapacity <= 0)
                 throw new ArgumentOutOfRangeException(nameof(playersCapacity));

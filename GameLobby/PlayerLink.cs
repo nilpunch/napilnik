@@ -6,14 +6,8 @@ namespace Napilnik.GameLobby
     {
         public PlayerLink(IPlayer player, IRoom room)
         {
-            if (player == null)
-                throw new ArgumentNullException(nameof(player));
-                
-            if (room == null)
-                throw new ArgumentNullException(nameof(room));
-                
-            Player = player;
-            Room = room;
+            Player = player ?? throw new ArgumentNullException(nameof(player));
+            Room = room ?? throw new ArgumentNullException(nameof(room));
         }
 
         public IPlayer Player { get; }

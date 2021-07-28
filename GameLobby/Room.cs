@@ -7,7 +7,7 @@ namespace Napilnik.GameLobby
     {
         private readonly ChatHistory _chatHistory;
         private readonly PlayersStatusesStorage _playersStatuses;
-        private readonly PlayersReadyCount _playersCounter;
+        private readonly PlayersReadyCounter _playersCounter;
         private readonly ILobby _relatedLobby;
 
         private bool _disposed;
@@ -15,17 +15,14 @@ namespace Napilnik.GameLobby
 
         public Room(ILobby lobby, int playersCapacity)
         {
-            if (lobby == null)
-                throw new ArgumentNullException(nameof(lobby));
-            
+            _relatedLobby = lobby ?? throw new ArgumentNullException(nameof(lobby));
+            _playersCounter = new PlayersReadyCounter(playersCapacity);
             _chatHistory = new ChatHistory();
             _playersStatuses = new PlayersStatusesStorage();
-            _playersCounter = new PlayersReadyCount(playersCapacity);
 
             InGame = false;
             _disposed = false;
-            _relatedLobby = lobby;
-            
+
             lobby.PlayerLinked += OnPlayerLinked;
             lobby.PlayerUnlinked += OnPlayerUnlinked;
         }

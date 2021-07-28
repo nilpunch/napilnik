@@ -10,11 +10,8 @@ namespace Napilnik.BotWeaponPlayer
 
         public Weapon(Damage damage, Ammo ammo)
         {
-            if (ammo == null)
-                throw new ArgumentNullException(nameof(ammo));
-
             _damage = damage;
-            _ammo = ammo;
+            _ammo = ammo ?? throw new ArgumentNullException(nameof(ammo));
         }
 
         public bool CanAttack => _ammo.Empty;

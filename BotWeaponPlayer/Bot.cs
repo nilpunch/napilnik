@@ -8,10 +8,7 @@ namespace Napilnik.BotWeaponPlayer
 
         public Bot(Weapon weapon)
         {
-            if (weapon == null)
-                throw new ArgumentNullException(nameof(weapon));
-
-            _weapon = weapon;
+            _weapon = weapon ?? throw new ArgumentNullException(nameof(weapon));
         }
 
         public void OnSeePlayer(Player player)

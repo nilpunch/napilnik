@@ -6,23 +6,8 @@ using System.Linq;
 
 namespace Napilnik.Shop
 {
-    public class Warehouse : IGoodsProvider, IEnumerable<Warehouse.StoredGood>
+    public class Warehouse : IGoodsProvider, IEnumerable<StoredGood>
     {
-        public struct StoredGood
-        {
-            public StoredGood(Good good, Amount amount)
-            {
-                if (good == null)
-                    throw new ArgumentNullException(nameof(good));
-                
-                Good = good;
-                Amount = amount;
-            }
-
-            public Good Good { get; }
-            public Amount Amount { get; }
-        }
-
         private readonly Dictionary<Good, Amount> _storedGoods;
 
         public Warehouse()

@@ -11,18 +11,9 @@ namespace Napilnik.GameLobby
 
         public Chat(IPlayer player, ChatHistory chatHistory, IChatPermissionChecker permissionChecker)
         {
-            if (player == null)
-                throw new ArgumentNullException(nameof(player));
-            
-            if (chatHistory == null)
-                throw new ArgumentNullException(nameof(chatHistory));
-            
-            if (permissionChecker == null)
-                throw new ArgumentNullException(nameof(permissionChecker));
-
-            _player = player;
-            _chatHistory = chatHistory;
-            _permissionChecker = permissionChecker;
+            _player = player ?? throw new ArgumentNullException(nameof(player));
+            _chatHistory = chatHistory ?? throw new ArgumentNullException(nameof(chatHistory));
+            _permissionChecker = permissionChecker ?? throw new ArgumentNullException(nameof(permissionChecker));
         }
 
         public bool Locked => _permissionChecker.HaveChattingPermission(_player);
